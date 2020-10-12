@@ -14,7 +14,7 @@ public class LoginService {
         Jsoup.connect(credentials.getLoginUrl())
             .followRedirects(true)
             .execute();
-    return Jsoup.connect("https://firstbd.ltd/work/index.php")
+    return Jsoup.connect(credentials.getLoginUrl())
             .data("username", credentials.getUsername())
             .data("password", credentials.getPassword())
             .cookies(loginPageResponse.cookies())
