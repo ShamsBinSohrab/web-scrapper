@@ -32,10 +32,10 @@ public class LoginService {
       Scanner scanner = new Scanner(System.in);
       loginUrl = "https://firstbd.ltd/work/index.php";
 
-      System.out.println("Username: ");
+      System.out.print("Username: ");
       this.username = scanner.next();
 
-      System.out.println("Password: ");
+      System.out.print("Password: ");
       this.password = scanner.next();
     }
 
