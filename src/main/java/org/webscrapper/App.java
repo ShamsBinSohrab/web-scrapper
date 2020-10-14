@@ -2,10 +2,14 @@ package org.webscrapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.jsoup.nodes.Document;
+import org.webscrapper.model.Record;
 import org.webscrapper.service.FileService;
 import org.webscrapper.service.HtmlParser;
 
@@ -22,7 +26,11 @@ public class App {
       final File file = fileService.selectFile();
       System.out.println("Selected file: " + file.getName());
       final XSSFSheet sheet = fileService.getSheet(file);
-      fileService.printSheet(sheet);
+      final List<Record> records = new ArrayList<>();
+      for (Row row : sheet) {
+        records.add(Record.recordFromRow(row));
+      }
+      fileService.printRecords(records);
       System.out.print("To insert this data type 'confirm' and press enter: ");
       String confirm = new Scanner(System.in).next();
       if (confirm.equals("confirm")) {

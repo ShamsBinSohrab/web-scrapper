@@ -1,0 +1,18 @@
+package org.webscrapper.model;
+
+public enum DataColumn {
+  RECORD_NO,
+  POLICY_DATE,
+  POLICY_NO,
+  MEDICAL_CARD_NO,
+  FIRST_NAME,
+  LAST_NAME,
+  CITY,
+  STATE,
+  PHONE,
+  MARTIAL_STATUS,
+  GP_CODE,
+  HOSPITAL_CLAIM_DAYS,
+  PAID_AMOUNT,
+  NET_AMOUNT,
+}

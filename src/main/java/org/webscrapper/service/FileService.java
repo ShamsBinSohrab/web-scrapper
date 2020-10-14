@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.webscrapper.model.Record;
 
 public class FileService {
 
@@ -43,30 +44,16 @@ public class FileService {
     return new XSSFWorkbook(file).getSheetAt(0);
   }
 
-  public void printSheet(XSSFSheet sheet) {
-    final List<String> list = new ArrayList<>();
+  public void printRecords(List<Record> records) {
     final AsciiTable table = new AsciiTable();
     table.addRule();
     table.addRow(headers);
     table.addRule();
-    for (Row row : sheet) {
-      list.clear();
-      final Iterator<Cell> cellIterator = row.cellIterator();
-      while (cellIterator.hasNext()) {
-        list.add(getCellValue(cellIterator.next()));
-      }
-      table.addRow(list);
+    for (Record record : records) {
+      table.addRow(record.print());
       table.addRule();
     }
     table.setTextAlignment(TextAlignment.CENTER);
     System.out.println(table.render(150));
-  }
-
-  private String getCellValue(Cell cell) {
-    return switch (cell.getCellType()) {
-      case NUMERIC -> String.valueOf(cell.getNumericCellValue());
-      case STRING -> cell.getStringCellValue();
-      default -> "";
-    };
   }
 }
