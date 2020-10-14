@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.Scanner;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.jsoup.Connection.Response;
+import org.jsoup.nodes.Document;
 import org.webscrapper.service.FileService;
-import org.webscrapper.service.LoginService;
+import org.webscrapper.service.HtmlParser;
 
 /**
  * Hello world!
@@ -15,7 +15,7 @@ import org.webscrapper.service.LoginService;
 public class App {
 
   private static final FileService fileService = new FileService();
-  private static final LoginService loginService = new LoginService();
+  private static final HtmlParser htmlParser = new HtmlParser();
 
   public static void main(String[] args) {
     try {
@@ -26,8 +26,7 @@ public class App {
       System.out.print("To insert this data type 'confirm' and press enter: ");
       String confirm = new Scanner(System.in).next();
       if (confirm.equals("confirm")) {
-        final Response response = loginService.login();
-        System.out.println(response.parse().getElementsByClass("navbar-brand").get(0).html());
+        final Document document = htmlParser.login();
       }
       sheet.getWorkbook().close();
     } catch (RuntimeException | IOException | InvalidFormatException ex) {
