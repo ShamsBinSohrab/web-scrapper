@@ -40,8 +40,14 @@ public class FileService {
     throw new IOException("No file selected");
   }
 
-  public XSSFSheet getSheet(File file) throws IOException, InvalidFormatException {
-    return new XSSFWorkbook(file).getSheetAt(0);
+  public List<Record> extractRecords(File file) throws IOException, InvalidFormatException {
+    final XSSFSheet sheet = new XSSFWorkbook(file).getSheetAt(0);
+    final List<Record> records = new ArrayList<>();
+    for (Row row : sheet) {
+      records.add(Record.recordFromRow(row));
+    }
+    sheet.getWorkbook().close();
+    return records;
   }
 
   public void printRecords(List<Record> records) {
