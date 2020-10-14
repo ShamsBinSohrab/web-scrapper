@@ -3,12 +3,9 @@ package org.webscrapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.jsoup.Connection.Response;
-import org.jsoup.nodes.Document;
-import org.slf4j.LoggerFactory;
 import org.webscrapper.service.FileService;
 import org.webscrapper.service.LoginService;
 
