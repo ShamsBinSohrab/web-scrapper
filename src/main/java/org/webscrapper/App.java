@@ -1,50 +1,42 @@
 package org.webscrapper;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Scanner;
+import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.jsoup.Connection.Response;
+import org.jsoup.nodes.Document;
+import org.slf4j.LoggerFactory;
 import org.webscrapper.service.FileService;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.webscrapper.service.LoginService;
 
 /**
  * Hello world!
- *
  */
-public class App
-{
-    public static void main( String[] args ) throws IOException, InvalidFormatException {
-        File file = FileService.getInstance().choose();
-        FileInputStream inputStream = new FileInputStream(file);
-        XSSFWorkbook workbook = new XSSFWorkbook(file);
-        XSSFSheet sheet = workbook.getSheetAt(0);
+public class App {
 
-        Iterator<Row> rowIterator = sheet.iterator();
+  private static final FileService fileService = new FileService();
+  private static final LoginService loginService = new LoginService();
 
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-            Iterator<Cell> cellIterator = row.cellIterator();
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-                if (cell.getCellType().equals(CellType.NUMERIC)) {
-                    System.out.print(cell.getNumericCellValue() + " ");
-                } else if (cell.getCellType().equals(CellType.STRING)) {
-                    System.out.print(cell.getStringCellValue() + " ");
-                } else {
-                    System.out.print("Other -> " + cell.getCellType().name() + " ");
-                }
-            }
-            System.out.println("\n");
-        }
-
-//        Document doc = LoginService.getInstance().login().parse();
-//        System.out.println(doc.getElementsByClass("navbar-brand").get(0).html());
-
-
+  public static void main(String[] args) {
+    try {
+      final File file = fileService.selectFile();
+      System.out.println("Selected file: " + file.getName());
+      final XSSFSheet sheet = fileService.getSheet(file);
+      fileService.printSheet(sheet);
+      System.out.print("To insert this data type 'confirm' and press enter: ");
+      String confirm = new Scanner(System.in).next();
+      if (confirm.equals("confirm")) {
+        final Response response = loginService.login();
+        System.out.println(response.parse().getElementsByClass("navbar-brand").get(0).html());
+      }
+      sheet.getWorkbook().close();
+    } catch (RuntimeException | IOException | InvalidFormatException ex) {
+      System.out.println("Error: " + ex.getMessage());
+    } finally {
+      System.exit(0);
     }
+  }
 }
